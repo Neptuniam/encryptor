@@ -4,36 +4,34 @@
         Liam & Carter's Encryption
     </h1>
 
-    <div class="row center-xs fullWidth">
-        <div class="col-xs-3 start-xs">
+    <div class="row center-xs">
+        <div class="col-xs-6 col-md-3 start-xs">
             <label>Enter a new key</label>
             <input type="text" v-model="newKey" v-on:keyup.enter="setNewKey" class="uk-input">
         </div>
     </div>
 
-    <div v-if="key && encryptedKey" class="row center-xs middle-xs fullWidth Encryptors">
-        <div class="col-xs-4 start-xs">
+    <div v-if="key && encryptedKey" class="row center-xs middle-xs Encryptors">
+        <div class="col-xs-10 col-md-4 start-xs">
             <label>English</label>
 
-            <textarea rows="10" class="fullWidth" v-model="englishText"
-                      v-on:keyup.enter="encryption" />
+            <textarea rows="10" v-model="englishText" v-on:keyup.enter="encryption" />
         </div>
 
-        <div class="col-xs-2">
-            <button type="button" class="uk-button uk-button-primary uk-text-capitalize" @click="encryption(englishText)">
+        <div class="col-xs-10 col-md-2">
+            <button type="button" class="uk-button uk-button-primary uk-text-capitalize" @click="encryption">
                 Run Encryption
             </button>
             <br>
-            <button type="button" class="uk-button uk-button-primary uk-text-capitalize"  @click="decryption(encryptedText)">
+            <button type="button" class="uk-button uk-button-primary uk-text-capitalize"  @click="decryption">
                 Run Decryption
             </button>
         </div>
 
-        <div class="col-xs-4 start-xs">
+        <div class="col-xs-10 col-md-4 start-xs">
             <label>Encrypted</label>
 
-            <textarea rows="10" class="fullWidth" v-model="encryptedText"
-                      v-on:keyup.enter="decryption" />
+            <textarea rows="10" v-model="encryptedText" v-on:keyup.enter="decryption" />
         </div>
     </div>
 </div>
@@ -54,7 +52,20 @@ export default {
         }
     },
     methods: {
+        findChar(char, searchKey, retrieveKey) {
+            let index = searchKey.indexOf(char)
+
+            if (index >= 0 && index < searchKey.length)
+                return retrieveKey[index]
+            else
+                console.log("Could not find: " + char)
+        },
+        removeByIndex(text, i) {
+            return text.substring(0, i) + text.substring(i+1)
+        },
+
         buildEncrypted(key) {
+            // Reset the key to its default state
             this.encryptedKey = this.alpha
 
             // Convert the encryption key by removing duplicate letters
@@ -65,23 +76,22 @@ export default {
 
             var i
             for (let char of noDups)
-                // Push every character of the user specified encryption key to the front of the alphabet
+                // Push every character of the user specified encryption key to the front of the encrypted alphabet key
                 if ((i = this.encryptedKey.indexOf(char)) >= 0)
-                    this.encryptedKey = char + this.encryptedKey.substring(0, i) + this.encryptedKey.substring(i+1)
+                    this.encryptedKey = char + this.removeByIndex(this.encryptedKey, i)
 
             if (this.encryptedKey.length != this.alpha.length)
-                alert("Failed to generate key properlly")
+                alert("Failed to encrypt alpha key correctly")
         },
 
 
         getKey() {
             this.key = localStorage.getItem('EncryptKey')
 
-            if (this.key) {
+            if (this.key)
                 this.buildEncrypted(this.key)
-            } else {
+            else
                 alert("Could not find Key in localStorage!")
-            }
         },
         setNewKey() {
             if (this.newKey) {
@@ -91,11 +101,6 @@ export default {
             } else {
                 alert("Please enter a key first")
             }
-        },
-
-        findChar(char, searchKey, retrieveKey) {
-            let index = searchKey.indexOf(char)
-            return index >= 0 && index < searchKey.length ? retrieveKey[index] : console.log("Could not find: " + char)
         },
 
         translate(text, searchKey, retrieveKey) {
@@ -136,10 +141,6 @@ export default {
     color: #2c3e50;
 }
 
-.fullWidth {
-    width: 100% !important;
-}
-
 .uk-input, .uk-button, textarea {
     border-radius: 5px;
     min-height: 20px;
@@ -150,12 +151,13 @@ export default {
 }
 
 textarea {
+    width: 100% !important;
     padding: 5px;
+    font-size: 16px;
 }
 
 .Encryptors {
-    /* margin: 100px 0px 0px 0px; */
-    margin-top: 100px;
+    margin-top: 120px;
 }
 
 label {
@@ -165,7 +167,7 @@ label {
     margin: 0px 0px 5px 5px;
 }
 
-.title {
+h1 {
     margin: 20px 0 50px 0px;
 }
 </style>
