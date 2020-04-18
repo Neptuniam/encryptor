@@ -39,7 +39,7 @@
 
 <script>
 export default {
-    data: function() {
+    data() {
         return {
             alpha: "`1234567890-=~!@#$%^&*()_+qwertyuiop[]\\QWERTYUIOP{}|asdfghjkl;'ASDFGHJKL:\"zxcvbnm,./ZXCVBNM<>? \n",
 
@@ -51,6 +51,7 @@ export default {
             encryptedText: null
         }
     },
+
     methods: {
         findChar(char, searchKey, retrieveKey) {
             let index = searchKey.indexOf(char)
@@ -127,7 +128,8 @@ export default {
             this.englishText = this.translate(this.encryptedText, this.encryptedKey, this.alpha)
         },
     },
-    mounted: function() {
+    
+    mounted() {
         this.getKey()
     },
 }
