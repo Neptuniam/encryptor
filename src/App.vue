@@ -1,35 +1,51 @@
 <template>
 <div id="app">
-    <h1 class="row center-xs title">
-        Liam & Carter's Encryption
+    <h1 class=" title">
+        Liam & Carter's Encryptor
     </h1>
 
-    <div class="row center-xs">
-        <div class="col-xs-6 col-md-3 start-xs">
-            <label>Enter a new key</label>
-            <input type="text" v-model="newKey" v-on:keyup.enter="setNewKey" class="uk-input">
-        </div>
+    <div class="Key">
+        <input type="text" v-model="newKey" v-on:keyup.enter="setNewKey" placeholder="Enter your encryption key here" class="uk-input">
     </div>
 
     <div v-if="key && encryptedKey" class="row center-xs middle-xs Encryptors">
         <div class="col-xs-10 col-md-4 start-xs">
-            <label>English</label>
+            <div class="row bottom-xs">
+                <label>English</label>
+
+                <div class="col-xs end-xs">
+                    <button type="button" class="uk-button uk-button-danger uk-icon"
+                            uk-icon="trash" uk-tooltip="Clear text section" @click="englishText = null" />
+
+                    <button type="button" class="uk-button uk-button-secondary uk-icon"
+                            uk-icon="move" uk-tooltip="Copy text section" v-clipboard="() => englishText" />
+
+                    <button type="button" class="uk-button uk-button-primary uk-text-uppercase"
+                            uk-icon="icon: play; ratio: 1.5;" uk-tooltip="Run encryption" @click="encryption" />
+                </div>
+            </div>
 
             <textarea rows="10" v-model="englishText" v-on:keyup.enter="encryption" />
         </div>
 
-        <div class="col-xs-10 col-md-2">
-            <button type="button" class="uk-button uk-button-primary uk-text-capitalize" @click="encryption">
-                Run Encryption
-            </button>
-            <br>
-            <button type="button" class="uk-button uk-button-primary uk-text-capitalize"  @click="decryption">
-                Run Decryption
-            </button>
+        <div class="col-xs-10 col-md-1">
         </div>
 
         <div class="col-xs-10 col-md-4 start-xs">
-            <label>Encrypted</label>
+            <div class="row bottom-xs">
+                <label>Encrypted</label>
+
+                <div class="col-xs end-xs">
+                    <button type="button" class="uk-button uk-button-danger uk-icon"
+                            uk-icon="trash" uk-tooltip="Clear text section" @click="encryptedText = null" />
+
+                    <button type="button" class="uk-button uk-button-secondary uk-icon"
+                            uk-icon="move" uk-tooltip="Copy text section" v-clipboard="() => encryptedText" />
+
+                    <button type="button" class="uk-button uk-button-primary uk-text-uppercase"
+                            uk-icon="icon: play; ratio: 1.5;" uk-tooltip="Run decryption" @click="decryption" />
+                </div>
+            </div>
 
             <textarea rows="10" v-model="encryptedText" v-on:keyup.enter="decryption" />
         </div>
@@ -128,7 +144,7 @@ export default {
             this.englishText = this.translate(this.encryptedText, this.encryptedKey, this.alpha)
         },
     },
-    
+
     mounted() {
         this.getKey()
     },
@@ -141,6 +157,13 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
+
+    background-image: url('assets/shattered.png');
+    min-height: 100vh;
+    max-width: 100vw;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .uk-input, .uk-button, textarea {
@@ -149,12 +172,17 @@ export default {
 }
 
 .uk-button {
-    margin: 10px 0;
+    line-height: 35px;
+    margin: 2px 4px;
+    padding: 0 20px;
 }
 
 textarea {
-    width: 100% !important;
+    width: 100%;
+    max-width: 800px;
+
     padding: 5px;
+    margin-bottom: 40px;
     font-size: 16px;
 }
 
@@ -165,11 +193,19 @@ textarea {
 label {
     font-size: 14px;
     font-weight: 500;
-
-    margin: 0px 0px 5px 5px;
+}
+.Encryptors label {
+    margin: 0px 0px 0px 10px;
 }
 
 h1 {
-    margin: 20px 0 50px 0px;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.Key {
+    width: 400px;
+    max-width: 100%;
+    margin: auto;
 }
 </style>
